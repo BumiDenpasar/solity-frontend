@@ -1,18 +1,21 @@
 import { NextResponse } from 'next/server'
-import { getUserData } from './lib/auth';
+import { checkToken } from './lib/auth';
+import { cookies } from 'next/headers';
 
  
 export async function middleware(request) {
-    const token = request.cookies.get('auth-token')?.value;
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth-token')?.value;
+
     if (!token) {
         return NextResponse.redirect(new URL('/login', request.url));
       }
 
-    const isValidToken = await getUserData(token);
+    const isValidToken = await checkToken(token);
 
 
     if(!isValidToken){
-        response.cookies.delete('auth-token');
+        cookieStore.delete('auth-token'); 
         return NextResponse.redirect(new URL('/login', request.url))
     }
 

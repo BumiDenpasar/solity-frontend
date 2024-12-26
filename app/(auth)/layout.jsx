@@ -1,5 +1,5 @@
 import "../globals.css";
-import Decoration from "@/app/components/Decoration";
+import Decoration from "@/components/Decoration";
 import loginImage from '@/assets/login-person.png'; 
 import Image from "next/image";
 

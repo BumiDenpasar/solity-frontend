@@ -2,13 +2,14 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { updateUser } from "@/lib/auth";
+import { logoutUser, updateUser } from "@/lib/auth";
+
 
 const ProfileForm = ({ initialData, token }) => {
   const [email, setEmail] = useState(initialData.email);
   const [name, setName] = useState(initialData.name);
   const [error, setError] = useState("");
-  const [imagePreview, setImagePreview] = useState(initialData.profile_pic);
+  const [imagePreview, setImagePreview] = useState(initialData.profile_pic?initialData.profile_pic:'https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg');
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
   const router = useRouter();
@@ -25,6 +26,18 @@ const ProfileForm = ({ initialData, token }) => {
       setImagePreview(previewUrl);
     }
   };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+        const result = await logoutUser(token);
+        router.push("/");
+        router.refresh();
+      } catch (err) {
+        console.error('Error updating profile:', err);
+        setError(err.message || "An error occurred");
+      }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,7 +123,13 @@ const ProfileForm = ({ initialData, token }) => {
       <button type="submit" className="button">
         Submit
       </button>
+
+      <button onClick={handleLogout} className="danger-button">
+        Logout
+      </button>
+      
     </form>
+    
   );
 };
 

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { getUserData } from "@/lib/auth";
-import ProfileForm from "@/app/components/ProfileForm";
+import ProfileForm from "@/components/ProfileForm";
 
 const page = async () => {
   const cookieStore = await cookies();

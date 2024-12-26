@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { deleteNote, updateNote } from "@/lib/notes";
+import { createNote } from "@/lib/notes";
 
-const NoteForm = ({ note, id, token }) => {
-  const [title, setTitle] = useState(note.title);
-  const [body, setBody] = useState(note.body);
+const NoteForm = ({ token }) => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
   const [error, setError] = useState("");
-  const [imagePreview, setImagePreview] = useState(note.img);
+  const [imagePreview, setImagePreview] = useState("https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg");
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
   const router = useRouter();
@@ -27,34 +27,17 @@ const NoteForm = ({ note, id, token }) => {
     }
   };
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    try {
-        const result = await deleteNote(id, token);
-        router.push("/home");
-        router.refresh();
-      } catch (err) {
-        console.error('Error Deleting notes:', err);
-        setError(err.message || "An error occurred");
-      }
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-
-    if (title !== note.title) {
-      formData.append("title", title);
-    }
-    if (body !== note.body) {
-      formData.append("body", body);
-    }
+    formData.append("title", title);
+    formData.append("body", body);
     if (selectedFile) {
       formData.append("img", selectedFile);
     }
 
     try {
-      const result = await updateNote(formData, id, token);
+      const result = await createNote(formData, token);
       console.log("Update success:", result);
       router.push("/home");
       router.refresh();
@@ -67,8 +50,8 @@ const NoteForm = ({ note, id, token }) => {
   const textareaRef = useRef(null);
   const autoResize = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // Reset height
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set height to scrollHeight
+      textareaRef.current.style.height = "auto"; 
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; 
     }
   };
   useEffect(() => {
@@ -89,7 +72,7 @@ const NoteForm = ({ note, id, token }) => {
           alt="img"
           fill
           className="object-cover mx-auto mb-5 w-full rounded-lg"
-          unoptimized // Tambahkan ini untuk menghindari masalah dengan URL.createObjectURL
+          unoptimized 
         />
         <div className="flex absolute inset-0 justify-center items-center bg-black bg-opacity-40 rounded-lg opacity-0 transition-opacity hover:opacity-100">
           <span className="text-white">Click to change image</span>
@@ -100,7 +83,7 @@ const NoteForm = ({ note, id, token }) => {
           onChange={handleImageChange}
           accept="image/*"
           className="hidden"
-          name="profile_pic" // Tambahkan name attribute
+          name="profile_pic" 
         />
       </div>
       <input
@@ -114,19 +97,15 @@ const NoteForm = ({ note, id, token }) => {
         onChange={(e) => setBody(e.target.value)}
         className="box-border mt-2 w-full rounded-md resize-none text-secondary focus:outline-none h-max"
         ref={textareaRef}
+        placeholder="set your body here"
         onInput={autoResize}
       ></textarea>
 
       {error && <div className="text-sm text-center text-red-500">{error}</div>}
 
-      <div className="flex space-x-2">
-        <button type="submit" className="mt-5 button">
-          submit
-        </button>
-        <button onClick={handleDelete} className="mt-3 danger-button">
-          delete
-        </button>
-      </div>
+      <button type="submit" className="mt-5 button">
+        create
+      </button>
       <Link href={"/home"}>
         <div className="mt-3 text-center sec-button">Back to home</div>
       </Link>

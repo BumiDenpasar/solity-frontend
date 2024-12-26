@@ -41,13 +41,13 @@ export default function Home() {
             <div className="hidden md:block">
               <div className="flex items-center ml-10 space-x-8">
                 <Link
-                  href={"auth/login"}
+                  href={"/login"}
                   className="text-sm text-secondary"
                 >
                   Login
                 </Link>
                 <Link
-                  href={"auth/register"}
+                  href={"/register"}
                   className="text-sm text-secondary"
                 >
                   Register

@@ -64,6 +64,10 @@ body {
   @apply text-secondary text-sm
 }
 
+.danger-button {
+  @apply px-4 py-3 w-full text-sm font-semibold tracking-widest text-white uppercase bg-red-500 rounded-full transition-colors hover:bg-red-700
+}
+
 .button {
   @apply px-4 py-3 w-full text-sm font-semibold tracking-widest text-black uppercase bg-brand rounded-full transition-colors hover:bg-yellow-500
 }

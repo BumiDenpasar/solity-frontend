@@ -1,15 +1,21 @@
 import "../globals.css";
-import Decoration from "@/app/components/Decoration";
+import Decoration from "@/components/Decoration";
 import profile_pic from "@/assets/profile.png";
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from 'next/headers';
+import { getUserData } from '@/lib/auth';
 
 export const metadata = {
   title: "Welcome to Solity",
   description: "Notes app",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth-token')?.value;
+  const user = await getUserData(token);
+
   return (
     <div className="flex flex-col items-center pt-32 pb-28 min-h-screen base-layout">
         <Decoration />
@@ -39,12 +45,10 @@ export default function RootLayout({ children }) {
         </Link>
 
         <Link href={'/home/profile'}>
-            <Image 
-            src={profile_pic}
-            className="rounded-full border-2 border-brand"
-            alt="Login Person" 
-            width={40}
-            height={40}
+            <img 
+            src={user.data.profile_pic}
+            className="object-cover w-12 rounded-full border-2 transition-transform druation-300 hover:scale-105 aspect-square border-brand"
+            alt="profile picture" 
         />
         </Link>
         

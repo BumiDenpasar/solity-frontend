@@ -2,94 +2,107 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginSchema } from "@/app/utils/validation";
+import { registerUser } from "@/lib/auth";
 
+export default function page() {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [c_password, setC_password] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await registerUser(name, email, password, c_password);
 
-const page = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const router = useRouter();
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        loginSchema.parse({ email, password });
-        // Call your Laravel API for authentication
-        const res = await fetch("/api/auth/login", {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-          headers: { "Content-Type": "application/json" },
-        });
-        if (res.ok) {
-          router.push("/notes");
-        } else {
-          // Handle error
-        }
-      } catch (error) {
-        // Handle validation error
-      }
-    };
-  
+      document.cookie = `auth-token=${response.data.token}; path=/`;
+      router.push("/home");
+      router.refresh(); 
+    } catch (err) {
+      setError("Invalid credentials");
+    }
+  };
 
-    return (
-        <>
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-gray-900">
-                Welcome To Solity
-              </h1>
-              <p className="text-gray-600">
-                Make an account or{" "}
-                <a href="login" className="text-brand hover:text-orange-500">
-                  login here
-                </a>
-              </p>
-            </div>
-    
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                  {/* Email Input */}
-                  <div className="input-container">
-                    <label htmlFor="email">
-                      Email
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      placeholder="example@gmail.com"
-                      className="input"
-                    />
-                    
-                  </div>
-    
-                  {/* Password Input */}
-                  <div className="input-container">
-                    <label htmlFor="password" >
-                      Password
-                    </label>
-                    <input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="input"
-                    />
-                  </div>
-    
-                  {/* Login Button */}
-                  <button
-                    type="submit"
-                    className="button"
-                  >
-                    register
-                  </button>
-                </form>
-          </>
-    
-      );
-};
+  return (
+    <>
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold text-gray-900">Welcome To Solity</h1>
+        <p className="text-gray-600">
+          You can make an account or{" "}
+          <a href="/login" className="text-brand hover:text-orange-500">
+            login here
+          </a>
+        </p>
+      </div>
 
-export default page;
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        {/* Username Input */}
+        <div className="input-container">
+          <label htmlFor="username">Username</label>
+          <input
+            name="username"
+            id="username"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            placeholder="Bumi Denpasar"
+            className="input"
+          />
+        </div>
+
+        {/* Email Input */}
+        <div className="input-container">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="example@gmail.com"
+            className="input"
+          />
+        </div>
+
+        {/* Password Input */}
+        <div className="input-container">
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+
+         {/* Username Input */}
+         <div className="input-container">
+          <label htmlFor="c_password">Confirm Password</label>
+          <input
+            name="c_password"
+            id="c_password"
+            type="password"
+            value={c_password}
+            onChange={(e) => setC_password(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+
+        {error && (
+          <div className="text-sm text-center text-red-500">{error}</div>
+        )}
+
+        {/* Login Button */}
+        <button type="submit" className="button">
+          register
+        </button>
+      </form>
+    </>
+  );
+}
