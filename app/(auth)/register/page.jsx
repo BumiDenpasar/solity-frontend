@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/lib/auth";
 
-export default function page() {
+export default function Page() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [c_password, setC_password] = useState("");

@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { getUserData } from "@/lib/auth";
 import ProfileForm from "@/components/ProfileForm";
 
-const page = async () => {
+const Page = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get('auth-token')?.value;
   const data = await getUserData(token);
@@ -14,4 +14,4 @@ const page = async () => {
   );
 }
 
-export default page;
+export default Page;
