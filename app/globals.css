@@ -7,7 +7,7 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -18,4 +18,56 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.input{
+  @apply px-4 py-3 w-full rounded-full border drop-shadow-sm bg-neutral-100 border-neutral-200
+}
+
+.input-container{
+  @apply space-y-2
+}
+
+.input-container label{
+  @apply block text-sm text-gray-600
+}
+
+.base-layout{
+  @apply min-h-screen bg-gradient-to-br from-yellow-100 via-white to-yellow-100
+}
+
+.title{
+  @apply text-xl lg:text-2xl font-semibold text-black mb-7
+}
+
+.recent-notes{
+  @apply w-full aspect-square flex-shrink-0 bg-brand rounded-xl p-4 flex flex-col justify-between transition-transform duration-300 hover:scale-105
+}
+
+.recent-notes div{
+  @apply bg-white text-secondary py-1 lg:py-2 px-3 lg:px-5 rounded-full w-max text-[9px] lg:text-[10px] tracking-wide font-semibold
+}
+
+.recent-notes h5{
+  @apply text-black text-3xl lg:text-5xl
+}
+
+.notes{
+  @apply bg-gray-200 p-6 transition-all hover:scale-105 duration-300 hover:bg-brand rounded-xl
+}
+
+.notes h5{
+  @apply text-black text-2xl
+}
+
+.notes p{
+  @apply text-secondary text-sm
+}
+
+.button {
+  @apply px-4 py-3 w-full text-sm font-semibold tracking-widest text-black uppercase bg-brand rounded-full transition-colors hover:bg-yellow-500
+}
+
+.sec-button {
+  @apply px-4 py-3 w-full text-sm font-semibold tracking-widest uppercase bg-neutral-200 text-secondary rounded-full transition-colors hover:bg-yellow-500
 }
