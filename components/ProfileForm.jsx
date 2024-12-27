@@ -4,15 +4,18 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { logoutUser, updateUser } from "@/lib/auth";
 
-
 const ProfileForm = ({ initialData, token }) => {
+  const initialProfilePic =
+  initialData.profile_pic && Object.keys(initialData.profile_pic).length > 0
+      ? initialData.profile_pic
+      : "https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg";
   const [email, setEmail] = useState(initialData.email);
   const [name, setName] = useState(initialData.name);
   const [error, setError] = useState("");
-  const [imagePreview, setImagePreview] = useState(initialData.profile_pic ? initialData.profile_pic : 'https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg');
+  const [imagePreview, setImagePreview] = useState(initialProfilePic);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [loading, setLoading] = useState(false); 
-  const [loadingLogout, setLoadingLogout] = useState(false); 
+  const [loading, setLoading] = useState(false);
+  const [loadingLogout, setLoadingLogout] = useState(false);
 
   const fileInputRef = useRef(null);
   const router = useRouter();
@@ -32,18 +35,18 @@ const ProfileForm = ({ initialData, token }) => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    setLoadingLogout(true); 
+    setLoadingLogout(true);
     try {
-        const result = await logoutUser(token);
-        router.push("/");
-        router.refresh();
-      } catch (err) {
-        console.error('Error updating profile:', err);
-        setError(err.message || "An error occurred");
-      } finally {
-        setLoadingLogout(false); 
-      }
-  }
+      const result = await logoutUser(token);
+      router.push("/");
+      router.refresh();
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      setError(err.message || "An error occurred");
+    } finally {
+      setLoadingLogout(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,37 +54,40 @@ const ProfileForm = ({ initialData, token }) => {
     const formData = new FormData();
 
     if (name !== initialData.name) {
-      formData.append('name', name);
+      formData.append("name", name);
     }
     if (email !== initialData.email) {
-      formData.append('email', email);
+      formData.append("email", email);
     }
     if (selectedFile) {
-      formData.append('profile_pic', selectedFile);
+      formData.append("profile_pic", selectedFile);
     }
 
     try {
       const result = await updateUser(formData, token);
-      console.log('Update success:', result);
+      console.log("Update success:", result);
       router.push("/home");
       router.refresh();
     } catch (err) {
-      console.error('Error updating profile:', err);
+      console.error("Error updating profile:", err);
       setError(err.message || "An error occurred");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-      <div className="relative mx-auto w-80 h-80 cursor-pointer" onClick={handleImageClick}>
+      <div
+        className="relative mx-auto w-52 h-52 cursor-pointer lg:h-80 lg:w-80"
+        onClick={handleImageClick}
+      >
         <Image
           src={imagePreview}
           alt="Profile pic"
           fill
           className="object-cover rounded-full border-2 border-brand"
-          unoptimized 
+          unoptimized
         />
         <div className="flex absolute inset-0 justify-center items-center bg-black bg-opacity-40 rounded-full opacity-0 transition-opacity hover:opacity-100">
           <span className="text-white">Click to change image</span>
@@ -95,7 +101,7 @@ const ProfileForm = ({ initialData, token }) => {
           name="profile_pic"
         />
       </div>
-      
+
       <div className="input-container">
         <label htmlFor="username">Username</label>
         <input
@@ -124,20 +130,20 @@ const ProfileForm = ({ initialData, token }) => {
         />
       </div>
 
-      {error && (
-        <div className="text-sm text-center text-red-500">{error}</div>
-      )}
+      {error && <div className="text-sm text-center text-red-500">{error}</div>}
 
       <button type="submit" className="button" disabled={loading}>
         {loading ? "Updating..." : "Submit"}
       </button>
 
-      <button onClick={handleLogout} className="danger-button" disabled={loadingLogout}>
+      <button
+        onClick={handleLogout}
+        className="danger-button"
+        disabled={loadingLogout}
+      >
         {loadingLogout ? "Logging out..." : "Logout"}
       </button>
-      
     </form>
-    
   );
 };
 

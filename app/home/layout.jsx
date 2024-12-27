@@ -3,8 +3,8 @@ import Decoration from "@/components/Decoration";
 import profile_pic from "@/assets/profile.png";
 import Image from "next/image";
 import Link from "next/link";
-import { cookies } from 'next/headers';
-import { getUserData } from '@/lib/auth';
+import { cookies } from "next/headers";
+import { getUserData } from "@/lib/auth";
 
 export const metadata = {
   title: "Welcome to Solity",
@@ -13,14 +13,14 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const cookieStore = await cookies();
-  const token = cookieStore.get('auth-token')?.value;
+  const token = cookieStore.get("auth-token")?.value;
   const user = await getUserData(token);
 
   return (
     <div className="flex flex-col items-center pt-32 pb-28 min-h-screen base-layout">
-        <Decoration />
+      <Decoration />
       <nav className="flex fixed top-5 z-50 justify-between items-center px-8 mx-auto w-full max-w-7xl">
-        <Link href={'/home'} className="w-max">
+        <Link href={"/home"} className="w-max">
           <svg
             className="w-16 h-8"
             width="358"
@@ -44,14 +44,18 @@ export default async function RootLayout({ children }) {
           </svg>
         </Link>
 
-        <Link href={'/home/profile'}>
-            <img 
-            src={user.data.profile_pic ? user.data.profile_pic : 'https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg'}
+        <Link href={"/home/profile"}>
+          <img
+            src={
+              user.data.profile_pic &&
+              Object.keys(user.data.profile_pic).length > 0
+                ? user.data.profile_pic
+                : "https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg"
+            }
             className="object-cover w-12 rounded-full border-2 transition-transform druation-300 hover:scale-105 aspect-square border-brand"
-            alt="profile picture" 
-        />
+            alt="profile picture"
+          />
         </Link>
-        
       </nav>
 
       <div className="px-8 w-full max-w-7xl">{children}</div>

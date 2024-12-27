@@ -12,6 +12,8 @@ const NoteForm = ({ note, id, token }) => {
   const [imagePreview, setImagePreview] = useState(note.img);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
   const fileInputRef = useRef(null);
   const router = useRouter();
 
@@ -31,7 +33,7 @@ const NoteForm = ({ note, id, token }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-        setLoading(true);
+        setLoadingDelete(true);
         const result = await deleteNote(id, token);
         router.push("/home");
         router.refresh();
@@ -39,7 +41,7 @@ const NoteForm = ({ note, id, token }) => {
         console.error('Error Deleting notes:', err);
         setError(err.message || "An error occurred");
       } finally {
-        setLoading(false);
+        setLoadingDelete(false);
       }
   }
 
@@ -126,12 +128,12 @@ const NoteForm = ({ note, id, token }) => {
 
       {error && <div className="text-sm text-center text-red-500">{error}</div>}
 
-      <div className="flex space-x-2">
-        <button type="submit" className="mt-5 button" disabled={loading}>
+      <div className="flex mt-5 space-x-2">
+        <button type="submit" className="button" disabled={loading}>
           {loading ? "Updating..." : "Update"}
         </button>
-        <button onClick={handleDelete} className="mt-3 danger-button" disabled={loading}>
-          {loading ? "Deleting..." : "Delete"}
+        <button onClick={handleDelete} className="danger-button" disabled={loadingDelete}>
+          {loadingDelete ? "Deleting..." : "Delete"}
         </button>
       </div>
       <Link href={"/home"}>
