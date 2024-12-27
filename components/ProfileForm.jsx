@@ -11,6 +11,9 @@ const ProfileForm = ({ initialData, token }) => {
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState(initialData.profile_pic ? initialData.profile_pic : 'https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false); 
+  const [loadingLogout, setLoadingLogout] = useState(false); 
+
   const fileInputRef = useRef(null);
   const router = useRouter();
 
@@ -29,6 +32,7 @@ const ProfileForm = ({ initialData, token }) => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
+    setLoadingLogout(true); 
     try {
         const result = await logoutUser(token);
         router.push("/");
@@ -36,14 +40,16 @@ const ProfileForm = ({ initialData, token }) => {
       } catch (err) {
         console.error('Error updating profile:', err);
         setError(err.message || "An error occurred");
+      } finally {
+        setLoadingLogout(false); 
       }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
 
-    // Hanya append jika nilai berbeda dari initialData
     if (name !== initialData.name) {
       formData.append('name', name);
     }
@@ -62,6 +68,8 @@ const ProfileForm = ({ initialData, token }) => {
     } catch (err) {
       console.error('Error updating profile:', err);
       setError(err.message || "An error occurred");
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -73,7 +81,7 @@ const ProfileForm = ({ initialData, token }) => {
           alt="Profile pic"
           fill
           className="object-cover rounded-full border-2 border-brand"
-          unoptimized // Tambahkan ini untuk menghindari masalah dengan URL.createObjectURL
+          unoptimized 
         />
         <div className="flex absolute inset-0 justify-center items-center bg-black bg-opacity-40 rounded-full opacity-0 transition-opacity hover:opacity-100">
           <span className="text-white">Click to change image</span>
@@ -84,7 +92,7 @@ const ProfileForm = ({ initialData, token }) => {
           onChange={handleImageChange}
           accept="image/*"
           className="hidden"
-          name="profile_pic" // Tambahkan name attribute
+          name="profile_pic"
         />
       </div>
       
@@ -120,12 +128,12 @@ const ProfileForm = ({ initialData, token }) => {
         <div className="text-sm text-center text-red-500">{error}</div>
       )}
 
-      <button type="submit" className="button">
-        Submit
+      <button type="submit" className="button" disabled={loading}>
+        {loading ? "Updating..." : "Submit"}
       </button>
 
-      <button onClick={handleLogout} className="danger-button">
-        Logout
+      <button onClick={handleLogout} className="danger-button" disabled={loadingLogout}>
+        {loadingLogout ? "Logging out..." : "Logout"}
       </button>
       
     </form>

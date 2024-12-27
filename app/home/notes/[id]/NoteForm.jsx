@@ -74,7 +74,7 @@ const NoteForm = ({ note, id, token }) => {
   const textareaRef = useRef(null);
   const autoResize = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; t
+      textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
