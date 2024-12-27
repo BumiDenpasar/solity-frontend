@@ -46,7 +46,7 @@ export default async function RootLayout({ children }) {
 
         <Link href={'/home/profile'}>
             <img 
-            src={user.data.profile_pic}
+            src={user.data.profile_pic ? user.data.profile_pic : 'https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg'}
             className="object-cover w-12 rounded-full border-2 transition-transform druation-300 hover:scale-105 aspect-square border-brand"
             alt="profile picture" 
         />

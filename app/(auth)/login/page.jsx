@@ -6,21 +6,22 @@ import { loginUser } from "@/lib/auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); 
     try {
       const response = await loginUser(email, password);
 
-      // Store token in cookie
       document.cookie = `auth-token=${response.data.token}; path=/`;
-      // Redirect to home page
       router.push("/home");
-      router.refresh(); // Refresh to update client-side cache
+      router.refresh(); 
     } catch (err) {
+      setIsLoading(false); 
       setError("Invalid credentials");
     }
   };
@@ -70,8 +71,8 @@ export default function Login() {
         )}
 
         {/* Login Button */}
-        <button type="submit" className="button">
-          login
+        <button type="submit" className="button" disabled={isLoading}>
+          {isLoading ? "Loading..." : "login"}
         </button>
       </form>
     </>

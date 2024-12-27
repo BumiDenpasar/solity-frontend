@@ -10,10 +10,12 @@ export default function Page() {
   const [c_password, setC_password] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false); 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await registerUser(name, email, password, c_password);
 
@@ -21,6 +23,7 @@ export default function Page() {
       router.push("/home");
       router.refresh(); 
     } catch (err) {
+      setIsLoading(false);
       setError("Invalid credentials");
     }
   };
@@ -38,7 +41,6 @@ export default function Page() {
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        {/* Username Input */}
         <div className="input-container">
           <label htmlFor="username">Username</label>
           <input
@@ -53,7 +55,6 @@ export default function Page() {
           />
         </div>
 
-        {/* Email Input */}
         <div className="input-container">
           <label htmlFor="email">Email</label>
           <input
@@ -67,7 +68,6 @@ export default function Page() {
           />
         </div>
 
-        {/* Password Input */}
         <div className="input-container">
           <label htmlFor="password">Password</label>
           <input
@@ -80,7 +80,6 @@ export default function Page() {
           />
         </div>
 
-         {/* Username Input */}
          <div className="input-container">
           <label htmlFor="c_password">Confirm Password</label>
           <input
@@ -98,9 +97,8 @@ export default function Page() {
           <div className="text-sm text-center text-red-500">{error}</div>
         )}
 
-        {/* Login Button */}
-        <button type="submit" className="button">
-          register
+        <button type="submit" className="button" disabled={isLoading}>
+          {isLoading ? "Loading..." : "register"}
         </button>
       </form>
     </>

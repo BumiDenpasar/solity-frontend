@@ -8,11 +8,9 @@ export default function Home() {
 
   return (
     <div className="base-layout">
-      {/* Navbar */}
       <nav className="fixed top-5 z-50 w-full">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
             <div className="w-max">
               <svg
                 className="w-16 h-8"
@@ -37,7 +35,6 @@ export default function Home() {
               </svg>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="flex items-center ml-10 space-x-8">
                 <Link
@@ -55,7 +52,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Mobile menu button */}
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -68,7 +64,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="absolute w-full border-b backdrop-blur-sm bg-white/95 md:hidden">
             <div className="px-4 py-4 space-y-3">
@@ -89,7 +84,6 @@ export default function Home() {
         )}
       </nav>
 
-      {/* Hero Section */}
       <div className="relative pt-[15rem] sm:pt-40 lg:pt-48">
         <div className="mx-auto max-w-7xl">
           <div className="text-center animate-fade-in">
@@ -112,7 +106,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Decorative Elements */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10">
             <div className="h-[300px] w-[300px] sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px] rounded-full bg-gradient-to-r from-yellow-200 to-orange-200 blur-3xl opacity-20 animate-pulse" />
           </div>

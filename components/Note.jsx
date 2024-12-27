@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 export default function Note({ id }) {
   const textareaRef = useRef(null);
   
-  // Function to auto-resize the textarea
   const autoResize = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -14,7 +13,7 @@ export default function Note({ id }) {
   };
 
   useEffect(() => {
-    autoResize(); // Auto-resize on mount
+    autoResize();
   }, []);
 
   return (

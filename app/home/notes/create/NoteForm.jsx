@@ -11,6 +11,7 @@ const NoteForm = ({ token }) => {
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState("https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const router = useRouter();
 
@@ -29,6 +30,7 @@ const NoteForm = ({ token }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
     formData.append("title", title);
     formData.append("body", body);
@@ -44,6 +46,8 @@ const NoteForm = ({ token }) => {
     } catch (err) {
       console.error("Error updating note:", err);
       setError(err.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,8 +107,8 @@ const NoteForm = ({ token }) => {
 
       {error && <div className="text-sm text-center text-red-500">{error}</div>}
 
-      <button type="submit" className="mt-5 button">
-        create
+      <button type="submit" className="mt-5 button" disabled={loading}>
+        {loading ? "Creating..." : "Create"}
       </button>
       <Link href={"/home"}>
         <div className="mt-3 text-center sec-button">Back to home</div>

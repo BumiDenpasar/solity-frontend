@@ -11,6 +11,7 @@ const NoteForm = ({ note, id, token }) => {
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState(note.img);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const router = useRouter();
 
@@ -30,12 +31,15 @@ const NoteForm = ({ note, id, token }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
+        setLoading(true);
         const result = await deleteNote(id, token);
         router.push("/home");
         router.refresh();
       } catch (err) {
         console.error('Error Deleting notes:', err);
         setError(err.message || "An error occurred");
+      } finally {
+        setLoading(false);
       }
   }
 
@@ -54,6 +58,7 @@ const NoteForm = ({ note, id, token }) => {
     }
 
     try {
+      setLoading(true);
       const result = await updateNote(formData, id, token);
       console.log("Update success:", result);
       router.push("/home");
@@ -61,14 +66,16 @@ const NoteForm = ({ note, id, token }) => {
     } catch (err) {
       console.error("Error updating note:", err);
       setError(err.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
   const textareaRef = useRef(null);
   const autoResize = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // Reset height
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set height to scrollHeight
+      textareaRef.current.style.height = "auto"; t
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
   useEffect(() => {
@@ -120,11 +127,11 @@ const NoteForm = ({ note, id, token }) => {
       {error && <div className="text-sm text-center text-red-500">{error}</div>}
 
       <div className="flex space-x-2">
-        <button type="submit" className="mt-5 button">
-          submit
+        <button type="submit" className="mt-5 button" disabled={loading}>
+          {loading ? "Updating..." : "Update"}
         </button>
-        <button onClick={handleDelete} className="mt-3 danger-button">
-          delete
+        <button onClick={handleDelete} className="mt-3 danger-button" disabled={loading}>
+          {loading ? "Deleting..." : "Delete"}
         </button>
       </div>
       <Link href={"/home"}>

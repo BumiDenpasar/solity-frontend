@@ -9,7 +9,7 @@ const ProfileForm = ({ initialData, token }) => {
   const [email, setEmail] = useState(initialData.email);
   const [name, setName] = useState(initialData.name);
   const [error, setError] = useState("");
-  const [imagePreview, setImagePreview] = useState(initialData.profile_pic?initialData.profile_pic:'https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg');
+  const [imagePreview, setImagePreview] = useState(initialData.profile_pic ? initialData.profile_pic : 'https://m.ftscrt.com/static/images/splash/6191a88a1c0e39463c2bf022_placeholder-image.svg');
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
   const router = useRouter();
