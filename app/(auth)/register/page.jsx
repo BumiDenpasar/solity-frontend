@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/lib/auth";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -18,11 +19,12 @@ export default function Page() {
     setIsLoading(true);
     try {
       const response = await registerUser(name, email, password, c_password);
-
-      document.cookie = `auth-token=${response.data.token}; path=/`;
+      toast.success('Register Success!');
+      //document.cookie = `auth-token=${response.data.token}; path=/`;
       router.push("/home");
       router.refresh(); 
     } catch (err) {
+      toast.error('An error occurred');
       setIsLoading(false);
       setError("Invalid credentials");
     }
@@ -97,7 +99,7 @@ export default function Page() {
           <div className="text-sm text-center text-red-500">{error}</div>
         )}
 
-        <button type="submit" className="button" disabled={isLoading}>
+        <button type="submit" className= {isLoading ? "disabled-button" : "button"} disabled={isLoading}>
           {isLoading ? "Loading..." : "register"}
         </button>
       </form>

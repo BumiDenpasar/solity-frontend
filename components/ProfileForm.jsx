@@ -3,6 +3,8 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { logoutUser, updateUser } from "@/lib/auth";
+import { toast } from 'react-toastify';
+
 
 const ProfileForm = ({ initialData, token }) => {
   const initialProfilePic =
@@ -38,10 +40,11 @@ const ProfileForm = ({ initialData, token }) => {
     setLoadingLogout(true);
     try {
       const result = await logoutUser(token);
+      toast.success('Logout Success!');
       router.push("/");
       router.refresh();
     } catch (err) {
-      console.error("Error updating profile:", err);
+      toast.error('An error occurred');
       setError(err.message || "An error occurred");
     } finally {
       setLoadingLogout(false);
@@ -65,11 +68,11 @@ const ProfileForm = ({ initialData, token }) => {
 
     try {
       const result = await updateUser(formData, token);
-      console.log("Update success:", result);
+      toast.success('Profile Updated!');
       router.push("/home");
       router.refresh();
     } catch (err) {
-      console.error("Error updating profile:", err);
+      toast.error('An error occurred');
       setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -132,13 +135,13 @@ const ProfileForm = ({ initialData, token }) => {
 
       {error && <div className="text-sm text-center text-red-500">{error}</div>}
 
-      <button type="submit" className="button" disabled={loading}>
+      <button type="submit" className=  {loading ? "disabled-button" : "button"} disabled={loading}>
         {loading ? "Updating..." : "Submit"}
       </button>
 
       <button
         onClick={handleLogout}
-        className="danger-button"
+        className={loadingLogout ? "disabled-button" : "danger-button"}
         disabled={loadingLogout}
       >
         {loadingLogout ? "Logging out..." : "Logout"}

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { createNote } from "@/lib/notes";
+import { toast } from "react-toastify";
 
 const NoteForm = ({ token }) => {
   const [title, setTitle] = useState("");
@@ -40,11 +41,11 @@ const NoteForm = ({ token }) => {
 
     try {
       const result = await createNote(formData, token);
-      console.log("Update success:", result);
+      toast.success('Note Created!');
       router.push("/home");
       router.refresh();
     } catch (err) {
-      console.error("Error updating note:", err);
+      toast.error('An error occurred');
       setError(err.message || "An error occurred");
     } finally {
       setLoading(false);

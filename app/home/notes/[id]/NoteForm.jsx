@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { deleteNote, updateNote } from "@/lib/notes";
+import { toast } from "react-toastify";
 
 const NoteForm = ({ note, id, token }) => {
   const [title, setTitle] = useState(note.title);
@@ -35,10 +36,12 @@ const NoteForm = ({ note, id, token }) => {
     try {
         setLoadingDelete(true);
         const result = await deleteNote(id, token);
+        toast.success('Note Deleted!');
         router.push("/home");
         router.refresh();
       } catch (err) {
         console.error('Error Deleting notes:', err);
+        toast.error('An error occurred');
         setError(err.message || "An error occurred");
       } finally {
         setLoadingDelete(false);
@@ -62,11 +65,11 @@ const NoteForm = ({ note, id, token }) => {
     try {
       setLoading(true);
       const result = await updateNote(formData, id, token);
-      console.log("Update success:", result);
+      toast.success('Note Updated!');
       router.push("/home");
       router.refresh();
     } catch (err) {
-      console.error("Error updating note:", err);
+      toast.error('An error occurred');
       setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -119,7 +122,7 @@ const NoteForm = ({ note, id, token }) => {
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <textarea
-        value={body}
+        value={body ?? ""}
         onChange={(e) => setBody(e.target.value)}
         className="box-border mt-2 w-full rounded-md resize-none text-secondary focus:outline-none h-max"
         ref={textareaRef}
@@ -129,10 +132,10 @@ const NoteForm = ({ note, id, token }) => {
       {error && <div className="text-sm text-center text-red-500">{error}</div>}
 
       <div className="flex mt-5 space-x-2">
-        <button type="submit" className="button" disabled={loading}>
+        <button type="submit" className= {loading ? "disabled-button" : "button"} disabled={loading}>
           {loading ? "Updating..." : "Update"}
         </button>
-        <button onClick={handleDelete} className="danger-button" disabled={loadingDelete}>
+        <button onClick={handleDelete} className= {loadingDelete ? "disabled-button" : "danger-button"} disabled={loadingDelete}>
           {loadingDelete ? "Deleting..." : "Delete"}
         </button>
       </div>

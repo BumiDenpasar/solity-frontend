@@ -68,3 +68,7 @@ body {
 .sec-button {
   @apply px-4 py-3 w-full h-full text-sm font-semibold tracking-widest uppercase bg-neutral-200 text-secondary rounded-full transition-colors hover:bg-yellow-500
 }
+
+.disabled-button {
+  @apply px-4 py-3 w-full h-full text-sm font-semibold tracking-widest uppercase bg-neutral-200 text-secondary rounded-full
+}
