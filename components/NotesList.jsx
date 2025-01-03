@@ -35,7 +35,7 @@ const NotesList = async () => {
             {recent.map(note => (
               <Link className="w-1/2" key={note.id} href={`/home/notes/${note.id}`}>
                 <div className="recent-notes">
-                  <h5>{note.title}</h5>
+                  <h5>{note.title.split(" ").slice(0, 2).join(" ")}</h5>
                   <div>
                     <p>Updated {formatDistanceToNow(new Date(note.updated_at), { addSuffix: true })}</p>
                   </div>
